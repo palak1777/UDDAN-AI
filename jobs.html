@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>AI Job Finder – UdaanAI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../static/css/style.css" rel="stylesheet">
+    <style>
+        .job-card { transition:all 0.25s; cursor:pointer; }
+        .job-card:hover { transform:translateY(-5px); box-shadow:0 20px 40px rgba(45,27,105,0.5); border-color:rgba(255,215,0,0.4) !important; }
+        .match-bar { height:6px; border-radius:3px; background:rgba(255,255,255,0.1); }
+        .match-fill { height:100%; border-radius:3px; background:linear-gradient(90deg,#22c55e,#ffd700); transition:width 1s ease; }
+        .filter-pill { background:rgba(255,255,255,0.06); border:1px solid rgba(255,215,0,0.2); color:#94a3b8; padding:6px 14px; border-radius:50px; cursor:pointer; transition:all 0.2s; font-size:0.85rem; }
+        .filter-pill:hover,.filter-pill.active { background:rgba(255,215,0,0.12); border-color:rgba(255,215,0,0.5); color:#ffd700; }
+        .pro-overlay { background:rgba(13,2,33,0.9); border:1px solid rgba(255,215,0,0.3); border-radius:16px; padding:30px; text-align:center; }
+    </style>
+</head>
+<body>
+<div id="navbar-placeholder"></div>
+
+<section class="page-hero">
+    <div class="container text-center position-relative z-1">
+        <div class="badge mb-3" style="background:rgba(255,215,0,0.15);color:#ffd700;padding:8px 16px;border-radius:50px;">
+            <i class="bi bi-stars me-2"></i>AI-Powered Job Matching
+        </div>
+        <h1 class="section-heading text-white mb-3">Find Your <span class="gradient-text">Perfect Job</span></h1>
+        <p class="text-white-50 mx-auto" style="max-width:600px;">Our AI matches you with safe, inclusive employers based on your unique skills and preferences.</p>
+        <!-- Mode indicator -->
+        <div class="mt-3 d-flex justify-content-center gap-3 align-items-center flex-wrap">
+            <div id="mode-badge" class="mode-indicator mode-free"><i class="bi bi-lock-fill me-1"></i>Free Mode (3 matches)</div>
+            <button class="btn btn-warning btn-sm fw-bold" onclick="upgradeToPro()" id="upgrade-btn"><i class="bi bi-lightning-fill me-1"></i>Unlock Pro – All Matches</button>
+        </div>
+    </div>
+</section>
+
+<div class="container py-5">
+    <!-- AI Match Panel -->
+    <div class="udaan-card p-4 mb-5">
+        <h5 class="text-warning fw-bold mb-3"><i class="bi bi-cpu-fill me-2"></i>AI Skill-Based Job Matcher</h5>
+        <div class="row g-3">
+            <div class="col-lg-5">
+                <label class="text-white-50 small mb-1">Your Skills (comma separated)</label>
+                <input type="text" id="skillInput" class="form-control" placeholder="e.g. Python, Design, Marketing, Excel">
+            </div>
+            <div class="col-lg-3">
+                <label class="text-white-50 small mb-1">Preferred Location</label>
+                <input type="text" id="locInput" class="form-control" placeholder="Mumbai, Remote...">
+            </div>
+            <div class="col-lg-3">
+                <label class="text-white-50 small mb-1">Category</label>
+                <select id="catSelect" class="form-select">
+                    <option value="">All Categories</option>
+                    <option>Technology</option><option>Design</option><option>Data Science</option>
+                    <option>Marketing</option><option>HR</option><option>Media</option><option>Support</option>
+                </select>
+            </div>
+            <div class="col-lg-1 d-flex align-items-end">
+                <button class="btn btn-udaan w-100" onclick="matchJobs()"><i class="bi bi-search"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter pills -->
+    <div class="d-flex flex-wrap gap-2 mb-4" id="filterPills">
+        <span class="filter-pill active" onclick="filterAll(this)">All Jobs</span>
+        <span class="filter-pill" onclick="filterType(this,'Full-time')">Full-time</span>
+        <span class="filter-pill" onclick="filterType(this,'Part-time')">Part-time</span>
+        <span class="filter-pill" onclick="filterType(this,'Remote')">Remote</span>
+        <span class="filter-pill" onclick="filterType(this,'Freelance')">Freelance</span>
+    </div>
+
+    <!-- Jobs Grid -->
+    <div id="jobsLoader" class="text-center py-5 d-none"><div class="spinner-udaan mx-auto"></div><p class="text-white-50 mt-3">AI is finding best matches...</p></div>
+    <div id="jobsGrid" class="row g-4"></div>
+    <div id="proTeaser" class="d-none mt-4">
+        <div class="pro-overlay">
+            <i class="bi bi-lock-fill text-warning fs-1 mb-3 d-block"></i>
+            <h5 class="text-white fw-bold">Unlock All Job Matches</h5>
+            <p class="text-white-50 small mb-4">Pro users see ALL job matches with advanced AI scoring, skill gap analysis, and direct contact details.</p>
+            <button class="btn btn-udaan" onclick="upgradeToPro()"><i class="bi bi-lightning-fill me-2"></i>Upgrade to Pro – Free Demo</button>
+        </div>
+    </div>
+</div>
+
+<div id="footer-placeholder"></div>
+<div id="auth-modals-placeholder"></div>
+<!-- Job Detail Modal -->
+<div class="modal fade" id="jobModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content" style="background:#1a0533;border:1px solid rgba(255,215,0,0.3);">
+            <div class="modal-header border-0">
+                <h5 class="modal-title text-white fw-bold" id="jobModalTitle"></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="jobModalBody"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../static/js/common.js"></script>
+<script>
+document.getElementById('navbar-placeholder').innerHTML = renderNavbar('jobs.html');
+document.getElementById('footer-placeholder').innerHTML = renderFooter();
+document.getElementById('auth-modals-placeholder').innerHTML = renderAuthModals();
+
+let allJobs = [];
+
+function updateModeUI() {
+    const pro = isPro();
+    const badge = document.getElementById('mode-badge');
+    const btn = document.getElementById('upgrade-btn');
+    if (pro) {
+        badge.className = 'mode-indicator mode-pro';
+        badge.innerHTML = '<i class="bi bi-lightning-fill me-1"></i>Pro Mode – Unlimited Access';
+        btn.style.display = 'none';
+    }
+}
+
+async function loadJobs() {
+    document.getElementById('jobsLoader').classList.remove('d-none');
+    const data = await apiGet('/jobs');
+    document.getElementById('jobsLoader').classList.add('d-none');
+    if (data) { allJobs = data; renderJobs(data); }
+}
+
+function renderJobs(jobs) {
+    const grid = document.getElementById('jobsGrid');
+    const teaser = document.getElementById('proTeaser');
+    const pro = isPro();
+    const display = pro ? jobs : jobs.slice(0, 6);
+    if (!display.length) { grid.innerHTML = '<div class="col-12 text-center text-white-50 py-5"><i class="bi bi-search fs-1 d-block mb-3"></i>No jobs found. Try different filters.</div>'; return; }
+    grid.innerHTML = display.map((j,i) => jobCard(j,i)).join('');
+    teaser.classList.toggle('d-none', pro || jobs.length <= 6);
+    // Animate match bars
+    setTimeout(() => document.querySelectorAll('.match-fill').forEach(b => b.style.width = b.dataset.w + '%'), 100);
+}
+
+function jobCard(j, i) {
+    const score = j.match_score || j.inclusive_score;
+    const icons = {Technology:'💻',Design:'🎨','Data Science':'📊',Marketing:'📢',HR:'👥',Media:'✏️',Support:'🤝'};
+    const icon = icons[j.category] || '💼';
+    const chips = (j.skills || '').split(',').slice(0,4).map(s=>`<span class="skill-chip">${s.trim()}</span>`).join('');
+    return `
+    <div class="col-lg-6 fade-in" style="animation-delay:${i*0.05}s">
+        <div class="udaan-card job-card p-4 h-100" onclick="showJob(${j.id})">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="d-flex gap-3 align-items-center">
+                    <div style="width:50px;height:50px;background:linear-gradient(135deg,rgba(45,27,105,0.8),rgba(26,5,51,0.9));border-radius:12px;border:1px solid rgba(255,215,0,0.2);display:flex;align-items:center;justify-content:center;font-size:1.5rem;">${icon}</div>
+                    <div>
+                        <h6 class="text-white fw-bold mb-0">${j.title}</h6>
+                        <small class="text-white-50">${j.company}</small>
+                    </div>
+                </div>
+                <span class="badge" style="background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3);">${j.type}</span>
+            </div>
+            <div class="d-flex gap-3 mb-3 flex-wrap">
+                <small class="text-white-50"><i class="bi bi-geo-alt me-1"></i>${j.location}</small>
+                <small class="text-warning"><i class="bi bi-currency-rupee me-1"></i>${j.salary}</small>
+            </div>
+            <div class="mb-3">${chips}</div>
+            <div class="d-flex justify-content-between align-items-center">
+                <div style="flex:1;margin-right:12px;">
+                    <div class="d-flex justify-content-between mb-1">
+                        <small class="text-white-50">Inclusive Score</small>
+                        <small class="text-warning fw-bold">${j.inclusive_score}%</small>
+                    </div>
+                    <div class="match-bar"><div class="match-fill" data-w="${j.inclusive_score}" style="width:0%"></div></div>
+                </div>
+                <button class="btn btn-sm btn-outline-udaan flex-shrink-0" onclick="event.stopPropagation();showJob(${j.id})">Details</button>
+            </div>
+        </div>
+    </div>`;
+}
+
+function showJob(id) {
+    const j = allJobs.find(x => x.id == id);
+    if (!j) return;
+    document.getElementById('jobModalTitle').textContent = j.title + ' @ ' + j.company;
+    document.getElementById('jobModalBody').innerHTML = `
+        <div class="row g-3 p-2">
+            <div class="col-md-6"><small class="text-white-50">Company</small><div class="text-white fw-semibold">${j.company}</div></div>
+            <div class="col-md-6"><small class="text-white-50">Location</small><div class="text-white fw-semibold">${j.location}</div></div>
+            <div class="col-md-6"><small class="text-white-50">Salary</small><div class="text-warning fw-semibold">₹${j.salary}</div></div>
+            <div class="col-md-6"><small class="text-white-50">Type</small><div class="text-white fw-semibold">${j.type}</div></div>
+            <div class="col-12"><small class="text-white-50">Description</small><p class="text-white-50 mt-1">${j.description}</p></div>
+            <div class="col-12"><small class="text-white-50 d-block mb-2">Skills Required</small>${(j.skills||'').split(',').map(s=>`<span class="skill-chip">${s.trim()}</span>`).join('')}</div>
+            <div class="col-12 d-flex justify-content-between align-items-center mt-2">
+                <div>${scoreBadge(j.inclusive_score)}</div>
+                <div class="d-flex gap-2">
+                    <a href="employer.html" class="btn btn-sm btn-outline-udaan">View Employer</a>
+                    <button class="btn btn-udaan btn-sm" onclick="applyJob('${j.title}','${j.company}')">Apply Now</button>
+                </div>
+            </div>
+        </div>`;
+    new bootstrap.Modal(document.getElementById('jobModal')).show();
+}
+
+function applyJob(title, company) {
+    if (!getUser()) { new bootstrap.Modal(document.getElementById('loginModal')).show(); return; }
+    alert(`✅ Application submitted for "${title}" at ${company}!\n\nThe employer will contact you shortly. Good luck! 🚀`);
+    bootstrap.Modal.getInstance(document.getElementById('jobModal')).hide();
+}
+
+async function matchJobs() {
+    const skills = document.getElementById('skillInput').value;
+    const loc = document.getElementById('locInput').value;
+    const cat = document.getElementById('catSelect').value;
+    document.getElementById('jobsLoader').classList.remove('d-none');
+    document.getElementById('jobsGrid').innerHTML = '';
+    const user = getUser();
+    const data = await apiPost('/jobs/match', { skills, is_pro: isPro(), user_id: user?.id });
+    document.getElementById('jobsLoader').classList.add('d-none');
+    if (data) { allJobs = data; renderJobs(data); }
+}
+
+function filterAll(el) { document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active')); el.classList.add('active'); renderJobs(allJobs); }
+function filterType(el, type) {
+    document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active')); el.classList.add('active');
+    renderJobs(allJobs.filter(j=>j.type===type||j.location===type));
+}
+
+updateModeUI();
+loadJobs();
+</script>
+</body>
+</html>

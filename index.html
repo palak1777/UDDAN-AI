@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UdaanAI – Inclusive Career Platform for LGBTQ+ India</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.0/base.css" rel="stylesheet">
+    <link href="../static/css/style.css" rel="stylesheet">
+    <style>
+        .hero { min-height:100vh; background:linear-gradient(135deg,#0d0221 0%,#1a0533 40%,#2d1b69 100%); position:relative; overflow:hidden; display:flex; align-items:center; }
+        .hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 80% 40%,rgba(255,107,53,0.12),transparent 55%), radial-gradient(ellipse at 20% 80%,rgba(255,215,0,0.08),transparent 50%); }
+        .orb { position:absolute; border-radius:50%; filter:blur(80px); }
+        .orb-1 { width:400px;height:400px;background:rgba(45,27,105,0.6);top:-100px;right:-100px; }
+        .orb-2 { width:300px;height:300px;background:rgba(255,107,53,0.08);bottom:50px;left:-80px; }
+        .floating { animation:float 6s ease-in-out infinite; }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
+        .feature-card:hover .feature-icon { transform:scale(1.15) rotate(5deg); }
+        .feature-icon { transition:transform 0.3s; font-size:2.5rem; }
+        .stat-card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,215,0,0.15); border-radius:16px; padding:24px; text-align:center; }
+        .stat-num { font-size:2.5rem; font-weight:800; font-family:'Syne',sans-serif; background:linear-gradient(90deg,#ffd700,#ff6b35);-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
+        .testimonial { background:rgba(255,255,255,0.04); border:1px solid rgba(255,215,0,0.15); border-radius:16px; padding:24px; }
+        .step-num { width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#ff6b35,#ffd700);display:flex;align-items:center;justify-content:center;font-weight:800;color:#0d0221;font-family:'Syne',sans-serif;font-size:1.2rem;flex-shrink:0; }
+        .pride-ribbon { height:6px; background:linear-gradient(90deg,#ff0000,#ff7700,#ffff00,#00aa00,#0000ff,#8b00ff); }
+    </style>
+</head>
+<body>
+<div id="navbar-placeholder"></div>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="container position-relative z-1">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <div class="pride-ribbon mb-4 rounded" style="width:80px;"></div>
+                <div class="badge mb-3" style="background:rgba(255,215,0,0.15);color:#ffd700;padding:8px 16px;border-radius:50px;font-size:0.85rem;border:1px solid rgba(255,215,0,0.3);">
+                    <i class="bi bi-stars me-2"></i>AI-Powered Inclusive Career Platform
+                </div>
+                <h1 class="display-3 fw-black text-white mb-4 fade-in" style="line-height:1.1;font-family:'Syne',sans-serif;">
+                    Your Career<br><span class="gradient-text">Without Limits</span><br>Without Fear
+                </h1>
+                <p class="text-white-50 fs-5 mb-5 fade-in-1" style="max-width:500px;line-height:1.8;">
+                    UdaanAI connects transgender and LGBTQ+ individuals with verified safe employers across India. Powered by AI. Built with love.
+                </p>
+                <div class="d-flex flex-wrap gap-3 fade-in-2">
+                    <a href="jobs.html" class="btn btn-udaan btn-lg"><i class="bi bi-briefcase-fill me-2"></i>Explore Jobs</a>
+                    <a href="chat.html" class="btn btn-outline-udaan btn-lg"><i class="bi bi-robot me-2"></i>Try AI Advisor</a>
+                </div>
+                <div class="d-flex flex-wrap gap-4 mt-5 fade-in-3">
+                    <div class="text-center">
+                        <div class="fw-bold text-white fs-5" id="hero-jobs">500+</div>
+                        <small class="text-white-50">Safe Jobs</small>
+                    </div>
+                    <div style="width:1px;background:rgba(255,255,255,0.1)"></div>
+                    <div class="text-center">
+                        <div class="fw-bold text-white fs-5">150+</div>
+                        <small class="text-white-50">Verified Employers</small>
+                    </div>
+                    <div style="width:1px;background:rgba(255,255,255,0.1)"></div>
+                    <div class="text-center">
+                        <div class="fw-bold text-white fs-5">10K+</div>
+                        <small class="text-white-50">Lives Changed</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="floating position-relative">
+                    <div style="width:380px;height:380px;background:linear-gradient(135deg,rgba(45,27,105,0.8),rgba(26,5,51,0.9));border-radius:50%;border:2px solid rgba(255,215,0,0.2);margin:auto;display:flex;align-items:center;justify-content:center;box-shadow:0 0 80px rgba(255,107,53,0.15);">
+                        <div class="text-center">
+                            <div style="font-size:6rem;line-height:1;">🚀</div>
+                            <h3 class="text-white fw-bold mt-2">UdaanAI</h3>
+                            <p class="text-warning small">Your Wings to Fly</p>
+                            <div class="d-flex justify-content-center gap-2 mt-3">
+                                <span class="skill-chip">Jobs 💼</span>
+                                <span class="skill-chip">AI 🤖</span>
+                                <span class="skill-chip">Safe 🛡️</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Floating cards -->
+                    <div style="position:absolute;top:10px;left:-20px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);border-radius:12px;padding:10px 16px;" class="text-center">
+                        <div class="text-success fw-bold">✓ Verified Safe</div>
+                        <small class="text-white-50">Employer</small>
+                    </div>
+                    <div style="position:absolute;bottom:20px;right:-10px;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);border-radius:12px;padding:10px 16px;" class="text-center">
+                        <div class="text-warning fw-bold">95% Match</div>
+                        <small class="text-white-50">AI Score</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features -->
+<section class="py-5 mt-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <div class="badge mb-3" style="background:rgba(255,107,53,0.15);color:#ff6b35;padding:8px 16px;border-radius:50px;">Our Platform</div>
+            <h2 class="section-heading text-white">Everything You Need<br><span class="gradient-text">to Thrive</span></h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="udaan-card feature-card p-4 h-100">
+                    <div class="feature-icon mb-3">🤖</div>
+                    <h5 class="text-white fw-bold">AI Job Matcher</h5>
+                    <p class="text-white-50 small">Enter your skills and get personalized job matches with safety scores from verified inclusive employers.</p>
+                    <a href="jobs.html" class="btn btn-sm btn-outline-udaan mt-auto">Find Jobs →</a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="udaan-card feature-card p-4 h-100">
+                    <div class="feature-icon mb-3">🏢</div>
+                    <h5 class="text-white fw-bold">Employer Safety Index</h5>
+                    <p class="text-white-50 small">Every employer is rated on LGBTQ+ friendliness, non-discrimination policies, and safe workplace practices.</p>
+                    <a href="employer.html" class="btn btn-sm btn-outline-udaan mt-auto">Check Employers →</a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="udaan-card feature-card p-4 h-100">
+                    <div class="feature-icon mb-3">📄</div>
+                    <h5 class="text-white fw-bold">Inclusive Resume Builder</h5>
+                    <p class="text-white-50 small">Build a professional resume with AI suggestions tailored for inclusive workplaces. Pro users get advanced tips.</p>
+                    <a href="resume.html" class="btn btn-sm btn-outline-udaan mt-auto">Build Resume →</a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="udaan-card feature-card p-4 h-100">
+                    <div class="feature-icon mb-3">💬</div>
+                    <h5 class="text-white fw-bold">AI Career Advisor</h5>
+                    <p class="text-white-50 small">Chat with our AI advisor for career guidance, skill gap analysis, interview prep, and rights information.</p>
+                    <a href="chat.html" class="btn btn-sm btn-outline-udaan mt-auto">Start Chat →</a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="udaan-card feature-card p-4 h-100">
+                    <div class="feature-icon mb-3">❤️</div>
+                    <h5 class="text-white fw-bold">NGOs & Legal Rights</h5>
+                    <p class="text-white-50 small">Access a curated directory of NGOs, government schemes, scholarships, and legal rights resources.</p>
+                    <a href="resources.html" class="btn btn-sm btn-outline-udaan mt-auto">View Resources →</a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="udaan-card feature-card p-4 h-100" style="background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,107,53,0.08));border-color:rgba(255,215,0,0.3);">
+                    <div class="feature-icon mb-3">⚡</div>
+                    <h5 class="text-warning fw-bold">Pro AI Features</h5>
+                    <p class="text-white-50 small">Unlock skill gap analysis, unlimited job matches, interview simulation, and advanced career roadmaps.</p>
+                    <button class="btn btn-udaan btn-sm mt-auto" onclick="upgradeToPro()">Upgrade Free →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-6 col-lg-3"><div class="stat-card"><div class="stat-num">500+</div><div class="text-white-50 mt-1">Jobs Listed</div></div></div>
+            <div class="col-6 col-lg-3"><div class="stat-card"><div class="stat-num">150+</div><div class="text-white-50 mt-1">Safe Employers</div></div></div>
+            <div class="col-6 col-lg-3"><div class="stat-card"><div class="stat-num">10K+</div><div class="text-white-50 mt-1">People Helped</div></div></div>
+            <div class="col-6 col-lg-3"><div class="stat-card"><div class="stat-num">98%</div><div class="text-white-50 mt-1">Safety Rating</div></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- How it works -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-heading text-white">How <span class="gradient-text">UdaanAI</span> Works</h2>
+            <p class="text-white-50">Three simple steps to your dream inclusive career</p>
+        </div>
+        <div class="row g-4 justify-content-center">
+            <div class="col-lg-4">
+                <div class="d-flex gap-3 align-items-start">
+                    <div class="step-num">1</div>
+                    <div>
+                        <h6 class="text-white fw-bold">Create Free Account</h6>
+                        <p class="text-white-50 small">Sign up in seconds. Your data is safe, private, and never shared without consent.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="d-flex gap-3 align-items-start">
+                    <div class="step-num">2</div>
+                    <div>
+                        <h6 class="text-white fw-bold">Enter Your Skills</h6>
+                        <p class="text-white-50 small">Tell our AI your skills and preferences. It matches you with safe, verified job opportunities.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="d-flex gap-3 align-items-start">
+                    <div class="step-num">3</div>
+                    <div>
+                        <h6 class="text-white fw-bold">Apply with Confidence</h6>
+                        <p class="text-white-50 small">Every employer is verified. Apply knowing your identity will be respected and celebrated.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-heading text-white">Real Stories,<br><span class="gradient-text">Real Impact</span></h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="testimonial">
+                    <div class="text-warning mb-3">★★★★★</div>
+                    <p class="text-white-50">"UdaanAI helped me find a job where I'm respected as a transgender woman. I finally feel safe at work."</p>
+                    <div class="d-flex align-items-center gap-2 mt-3">
+                        <div style="width:40px;height:40px;background:linear-gradient(135deg,#ff6b35,#ffd700);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">👩</div>
+                        <div><div class="text-white fw-semibold small">Priya Sharma</div><div class="text-white-50" style="font-size:0.75rem;">UX Designer, Bengaluru</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="testimonial">
+                    <div class="text-warning mb-3">★★★★★</div>
+                    <p class="text-white-50">"The AI career advisor gave me interview tips that actually worked. Got my first IT job after 2 years of struggle."</p>
+                    <div class="d-flex align-items-center gap-2 mt-3">
+                        <div style="width:40px;height:40px;background:linear-gradient(135deg,#2d1b69,#4c2fa0);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🧑</div>
+                        <div><div class="text-white fw-semibold small">Rajan Verma</div><div class="text-white-50" style="font-size:0.75rem;">Backend Developer, Mumbai</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="testimonial">
+                    <div class="text-warning mb-3">★★★★★</div>
+                    <p class="text-white-50">"I didn't know about government schemes for transgender people. UdaanAI's resources page changed my life."</p>
+                    <div class="d-flex align-items-center gap-2 mt-3">
+                        <div style="width:40px;height:40px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">👱</div>
+                        <div><div class="text-white fw-semibold small">Meera Nair</div><div class="text-white-50" style="font-size:0.75rem;">HR Executive, Chennai</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="py-5 my-4">
+    <div class="container">
+        <div class="text-center p-5 rounded-4" style="background:linear-gradient(135deg,rgba(45,27,105,0.8),rgba(255,107,53,0.15));border:1px solid rgba(255,215,0,0.2);">
+            <div class="pride-bar mx-auto mb-4" style="width:100px;"></div>
+            <h2 class="section-heading text-white mb-3">Ready to <span class="gradient-text">Take Flight?</span></h2>
+            <p class="text-white-50 mb-4 mx-auto" style="max-width:500px;">Join thousands of LGBTQ+ professionals finding safe, dignified, and rewarding careers across India.</p>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <button class="btn btn-udaan btn-lg" data-bs-toggle="modal" data-bs-target="#registerModal"><i class="bi bi-rocket-fill me-2"></i>Join Free Today</button>
+                <a href="jobs.html" class="btn btn-outline-udaan btn-lg"><i class="bi bi-briefcase-fill me-2"></i>Browse Jobs</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="footer-placeholder"></div>
+<div id="auth-modals-placeholder"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../static/js/common.js"></script>
+<script>
+    document.getElementById('navbar-placeholder').innerHTML = renderNavbar('index.html');
+    document.getElementById('footer-placeholder').innerHTML = renderFooter();
+    document.getElementById('auth-modals-placeholder').innerHTML = renderAuthModals();
+</script>
+</body>
+</html>

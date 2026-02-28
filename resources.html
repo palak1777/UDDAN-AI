@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Resources – NGOs, Rights & Schemes – UdaanAI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../static/css/style.css" rel="stylesheet">
+    <style>
+        .res-card:hover { transform:translateY(-4px); }
+        .cat-NGO { border-left:3px solid #22c55e; }
+        .cat-Legal { border-left:3px solid #a78bfa; }
+        .cat-Government { border-left:3px solid #3b82f6; }
+        .cat-Helpline { border-left:3px solid #ef4444; }
+        .cat-Scholarship { border-left:3px solid #ffd700; }
+        .cat-icon-NGO { background:rgba(34,197,94,0.15); color:#22c55e; }
+        .cat-icon-Legal { background:rgba(167,139,250,0.15); color:#a78bfa; }
+        .cat-icon-Government { background:rgba(59,130,246,0.15); color:#3b82f6; }
+        .cat-icon-Helpline { background:rgba(239,68,68,0.15); color:#ef4444; }
+        .cat-icon-Scholarship { background:rgba(255,215,0,0.15); color:#ffd700; }
+        .emergency-card { background:linear-gradient(135deg,rgba(239,68,68,0.15),rgba(239,68,68,0.05)); border:1px solid rgba(239,68,68,0.3); }
+    </style>
+</head>
+<body>
+<div id="navbar-placeholder"></div>
+<section class="page-hero">
+    <div class="container text-center position-relative z-1">
+        <div class="badge mb-3" style="background:rgba(239,68,68,0.15);color:#f87171;padding:8px 16px;border-radius:50px;"><i class="bi bi-heart-fill me-2"></i>Community Support Hub</div>
+        <h1 class="section-heading text-white mb-3">Resources, Rights<br>& <span class="gradient-text">Support Networks</span></h1>
+        <p class="text-white-50 mx-auto" style="max-width:600px;">Access a curated directory of NGOs, government schemes, legal rights, scholarships, and helplines for LGBTQ+ individuals in India.</p>
+    </div>
+</section>
+
+<div class="container py-5">
+    <!-- Emergency banner -->
+    <div class="emergency-card rounded-4 p-4 mb-5">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h5 class="text-danger fw-bold mb-1"><i class="bi bi-exclamation-triangle-fill me-2"></i>Need Immediate Support?</h5>
+                <p class="text-white-50 mb-0">If you're in crisis, please reach out immediately. You are not alone. Help is available 24/7.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                <a href="tel:9152987821" class="btn btn-danger fw-bold me-2"><i class="bi bi-telephone-fill me-2"></i>Call Helpline</a>
+                <a href="chat.html" class="btn btn-outline-light btn-sm">AI Support Chat</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="d-flex flex-wrap gap-2 mb-5" id="catFilters">
+        <button class="filter-pill active" onclick="filterCat('',this)">All Resources</button>
+        <button class="filter-pill" onclick="filterCat('NGO',this)"><i class="bi bi-people-fill me-1"></i>NGOs</button>
+        <button class="filter-pill" onclick="filterCat('Legal',this)"><i class="bi bi-scale me-1"></i>Legal Rights</button>
+        <button class="filter-pill" onclick="filterCat('Government',this)"><i class="bi bi-bank me-1"></i>Government</button>
+        <button class="filter-pill" onclick="filterCat('Helpline',this)"><i class="bi bi-telephone-fill me-1"></i>Helplines</button>
+        <button class="filter-pill" onclick="filterCat('Scholarship',this)"><i class="bi bi-mortarboard-fill me-1"></i>Scholarships</button>
+    </div>
+
+    <!-- Resources Grid -->
+    <div id="resLoader" class="text-center py-5"><div class="spinner-udaan mx-auto"></div><p class="text-white-50 mt-3">Loading resources...</p></div>
+    <div id="resGrid" class="row g-4"></div>
+
+    <!-- Rights Section -->
+    <div class="mt-5">
+        <h3 class="text-white fw-bold mb-4"><span class="gradient-text">Know Your Rights</span></h3>
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="udaan-card p-4 h-100 cat-Legal">
+                    <div class="d-flex gap-3 mb-3">
+                        <div class="cat-icon-Legal p-3 rounded-3"><i class="bi bi-bank2 fs-4"></i></div>
+                        <div>
+                            <h6 class="text-white fw-bold mb-1">Section 377 Verdict</h6>
+                            <small class="text-white-50">Supreme Court – 2018</small>
+                        </div>
+                    </div>
+                    <p class="text-white-50 small">The Supreme Court of India decriminalized consensual same-sex relationships. No person can be prosecuted for their sexual orientation. You have the right to live freely and with dignity.</p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="udaan-card p-4 h-100 cat-Government">
+                    <div class="d-flex gap-3 mb-3">
+                        <div class="cat-icon-Government p-3 rounded-3"><i class="bi bi-file-earmark-text-fill fs-4"></i></div>
+                        <div>
+                            <h6 class="text-white fw-bold mb-1">Transgender Persons Act 2019</h6>
+                            <small class="text-white-50">Parliament of India</small>
+                        </div>
+                    </div>
+                    <p class="text-white-50 small">Prohibits discrimination in employment, education, healthcare, and housing. Provides right to self-perceived gender identity and access to welfare schemes.</p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="udaan-card p-4 h-100 cat-Legal">
+                    <div class="d-flex gap-3 mb-3">
+                        <div class="cat-icon-Legal p-3 rounded-3"><i class="bi bi-shield-fill-check fs-4"></i></div>
+                        <div>
+                            <h6 class="text-white fw-bold mb-1">POSH Act Protection</h6>
+                            <small class="text-white-50">Workplace Safety</small>
+                        </div>
+                    </div>
+                    <p class="text-white-50 small">The Prevention of Sexual Harassment at Workplace Act protects all employees. Report harassment to your company's Internal Complaints Committee (ICC) without fear.</p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="udaan-card p-4 h-100 cat-Government">
+                    <div class="d-flex gap-3 mb-3">
+                        <div class="cat-icon-Government p-3 rounded-3"><i class="bi bi-person-badge-fill fs-4"></i></div>
+                        <div>
+                            <h6 class="text-white fw-bold mb-1">Identity Document Rights</h6>
+                            <small class="text-white-50">Aadhaar & Passport</small>
+                        </div>
+                    </div>
+                    <p class="text-white-50 small">You have the right to update gender identity in all government documents including Aadhaar, PAN card, passport, and voter ID without requiring surgery.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="footer-placeholder"></div>
+<div id="auth-modals-placeholder"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../static/js/common.js"></script>
+<script>
+document.getElementById('navbar-placeholder').innerHTML = renderNavbar('resources.html');
+document.getElementById('footer-placeholder').innerHTML = renderFooter();
+document.getElementById('auth-modals-placeholder').innerHTML = renderAuthModals();
+
+let allResources = [];
+const catIcons = {NGO:'bi-people-fill',Legal:'bi-scale',Government:'bi-bank',Helpline:'bi-telephone-fill',Scholarship:'bi-mortarboard-fill'};
+
+async function loadResources() {
+    const data = await apiGet('/resources');
+    document.getElementById('resLoader').classList.add('d-none');
+    if (data) { allResources = data; renderResources(data); }
+}
+
+function renderResources(list) {
+    const grid = document.getElementById('resGrid');
+    if (!list.length) { grid.innerHTML = '<div class="col-12 text-center text-white-50 py-4">No resources found.</div>'; return; }
+    grid.innerHTML = list.map((r,i) => {
+        const catClass = `cat-${r.category}`;
+        const iconClass = `cat-icon-${r.category}`;
+        const icon = catIcons[r.category] || 'bi-info-circle-fill';
+        return `
+        <div class="col-lg-6 fade-in" style="animation-delay:${i*0.07}s">
+            <div class="udaan-card res-card p-4 h-100 ${catClass}">
+                <div class="d-flex gap-3 mb-3">
+                    <div class="${iconClass} p-3 rounded-3 flex-shrink-0"><i class="bi ${icon} fs-4"></i></div>
+                    <div>
+                        <h6 class="text-white fw-bold mb-1">${r.title}</h6>
+                        <span class="skill-chip" style="font-size:0.7rem;">${r.category}</span>
+                    </div>
+                </div>
+                <p class="text-white-50 small mb-3">${r.description}</p>
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    ${r.phone ? `<span class="text-white-50 small"><i class="bi bi-telephone me-1"></i>${r.phone}</span>` : '<span></span>'}
+                    ${r.link && r.link !== '#' ? `<a href="${r.link}" target="_blank" class="btn btn-sm btn-outline-udaan">Visit Website <i class="bi bi-arrow-up-right ms-1"></i></a>` : `<span class="text-white-50 small">No website available</span>`}
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function filterCat(cat, el) {
+    document.querySelectorAll('#catFilters .filter-pill').forEach(p=>p.classList.remove('active'));
+    el.classList.add('active');
+    renderResources(cat ? allResources.filter(r=>r.category===cat) : allResources);
+}
+
+// Add CSS for filter pills
+document.head.insertAdjacentHTML('beforeend','<style>.filter-pill{background:rgba(255,255,255,0.06);border:1px solid rgba(255,215,0,0.2);color:#94a3b8;padding:6px 14px;border-radius:50px;cursor:pointer;transition:all 0.2s;font-size:0.85rem;border:none;}.filter-pill:hover,.filter-pill.active{background:rgba(255,215,0,0.12);border:1px solid rgba(255,215,0,0.5);color:#ffd700;}</style>');
+
+loadResources();
+</script>
+</body>
+</html>

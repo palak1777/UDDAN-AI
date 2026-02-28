@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>AI Career Advisor – UdaanAI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../static/css/style.css" rel="stylesheet">
+    <style>
+        .chat-container { height: calc(100vh - 320px); min-height: 400px; max-height: 600px; }
+        .typing-dot { width:8px;height:8px;border-radius:50%;background:#94a3b8;animation:blink 1.4s infinite; }
+        .typing-dot:nth-child(2){animation-delay:0.2s} .typing-dot:nth-child(3){animation-delay:0.4s}
+        @keyframes blink{0%,80%,100%{opacity:0.2}40%{opacity:1}}
+        .quick-btn { background:rgba(255,255,255,0.06); border:1px solid rgba(255,215,0,0.2); color:#94a3b8; border-radius:50px; padding:6px 14px; cursor:pointer; font-size:0.8rem; transition:all 0.2s; white-space:nowrap; }
+        .quick-btn:hover { background:rgba(255,215,0,0.1); color:#ffd700; border-color:rgba(255,215,0,0.4); }
+        .msg-time { font-size:0.65rem; color:rgba(255,255,255,0.3); }
+        .pro-feature-chip { background:linear-gradient(135deg,rgba(255,215,0,0.15),rgba(255,107,53,0.15)); border:1px solid rgba(255,215,0,0.3); border-radius:8px; padding:4px 10px; font-size:0.75rem; color:#ffd700; display:inline-block; margin:2px; }
+    </style>
+</head>
+<body>
+<div id="navbar-placeholder"></div>
+<section class="page-hero" style="padding:50px 0 40px;">
+    <div class="container position-relative z-1">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="badge mb-3" style="background:rgba(45,27,105,0.5);color:#a78bfa;padding:8px 16px;border-radius:50px;"><i class="bi bi-robot me-2"></i>AI Career Advisor</div>
+                <h1 class="section-heading text-white mb-2">Chat with Your<br><span class="gradient-text">AI Career Guide</span></h1>
+                <p class="text-white-50">Get personalized career advice, skill gap analysis, interview prep, and legal rights guidance.</p>
+            </div>
+            <div class="col-lg-6">
+                <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+                    <div id="chat-mode-badge" class="mode-indicator mode-free"><i class="bi bi-lock-fill me-1"></i>Free: 5 messages</div>
+                    <button class="btn btn-warning btn-sm fw-bold" id="chat-upgrade-btn" onclick="upgradeToPro()"><i class="bi bi-lightning-fill me-1"></i>Unlock Pro – Unlimited</button>
+                </div>
+                <div class="mt-3">
+                    <small class="text-white-50">Pro Features:</small>
+                    <div class="mt-1">
+                        <span class="pro-feature-chip">Skill Gap Analysis</span>
+                        <span class="pro-feature-chip">Interview Simulation</span>
+                        <span class="pro-feature-chip">Career Roadmap</span>
+                        <span class="pro-feature-chip">Salary Insights</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container py-4">
+    <div class="row g-4">
+        <!-- Chat window -->
+        <div class="col-lg-8">
+            <div class="udaan-card p-0 overflow-hidden">
+                <!-- Chat header -->
+                <div class="p-3 d-flex align-items-center gap-3" style="background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,215,0,0.1);">
+                    <div style="width:44px;height:44px;background:linear-gradient(135deg,#2d1b69,#4c2fa0);border-radius:50%;border:2px solid rgba(255,215,0,0.3);display:flex;align-items:center;justify-content:center;font-size:1.3rem;">🤖</div>
+                    <div>
+                        <div class="text-white fw-bold">UdaanAI Advisor</div>
+                        <div class="d-flex align-items-center gap-1"><div style="width:8px;height:8px;background:#22c55e;border-radius:50%;"></div><small class="text-success">Online – Ready to help</small></div>
+                    </div>
+                    <button class="btn btn-sm ms-auto" style="background:rgba(255,255,255,0.06);color:#94a3b8;" onclick="clearChat()"><i class="bi bi-trash3 me-1"></i>Clear</button>
+                </div>
+                <!-- Messages area -->
+                <div class="chat-container p-3" id="chatArea" style="overflow-y:auto;">
+                    <!-- Welcome message -->
+                    <div class="d-flex gap-2 mb-3 fade-in">
+                        <div style="width:32px;height:32px;background:linear-gradient(135deg,#2d1b69,#4c2fa0);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">🤖</div>
+                        <div>
+                            <div class="chat-bubble-ai p-3">
+                                <p class="text-white mb-2">👋 Hello! I'm your UdaanAI Career Advisor. I'm here to help you with:</p>
+                                <ul class="text-white-50 small mb-2 ps-3">
+                                    <li>Finding the right job opportunities</li>
+                                    <li>Resume tips and career guidance</li>
+                                    <li>Interview preparation</li>
+                                    <li>Legal rights & LGBTQ+ workplace protections</li>
+                                </ul>
+                                <p class="text-white-50 small mb-0">What would you like help with today? 😊</p>
+                            </div>
+                            <div class="msg-time mt-1 ms-2">Just now</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Input area -->
+                <div class="p-3" style="border-top:1px solid rgba(255,215,0,0.1);">
+                    <div class="d-flex gap-2">
+                        <input type="text" id="chatInput" class="form-control" placeholder="Ask about jobs, resume, interview, rights..." onkeydown="if(event.key==='Enter')sendMsg()">
+                        <button class="btn btn-udaan px-4" onclick="sendMsg()" id="sendBtn"><i class="bi bi-send-fill"></i></button>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2 mt-2" id="quickBtns">
+                        <button class="quick-btn" onclick="quickAsk('Find me a job in technology')">💼 Tech Jobs</button>
+                        <button class="quick-btn" onclick="quickAsk('Give me resume tips')">📄 Resume Tips</button>
+                        <button class="quick-btn" onclick="quickAsk('What are my legal rights as LGBTQ+')">⚖️ My Rights</button>
+                        <button class="quick-btn" onclick="quickAsk('Help me prepare for interview')">🎯 Interview Prep</button>
+                        <button class="quick-btn" onclick="quickAsk('What skills should I learn')">📚 Skills</button>
+                        <button class="quick-btn pro-btn" onclick="quickAsk('Analyze my skill gap')">⚡ Skill Gap (Pro)</button>
+                        <button class="quick-btn pro-btn" onclick="quickAsk('Create my career roadmap')">🗺️ Career Path (Pro)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Free vs Pro comparison -->
+            <div class="udaan-card p-4 mb-4">
+                <h6 class="text-warning fw-bold mb-3"><i class="bi bi-lightning me-2"></i>Free vs Pro</h6>
+                <div class="mb-3 pb-3" style="border-bottom:1px solid rgba(255,255,255,0.08);">
+                    <div class="text-white-50 small fw-semibold mb-2">🆓 Free Plan</div>
+                    <ul class="text-white-50 small ps-3 mb-0">
+                        <li>5 messages per session</li>
+                        <li>Basic job & resume tips</li>
+                        <li>General career Q&A</li>
+                        <li>Rights information</li>
+                    </ul>
+                </div>
+                <div class="mb-3">
+                    <div class="text-warning small fw-semibold mb-2">⚡ Pro Plan</div>
+                    <ul class="text-white-50 small ps-3 mb-0">
+                        <li class="text-white">✅ Unlimited messages</li>
+                        <li class="text-white">✅ Skill gap analysis</li>
+                        <li class="text-white">✅ Personalized career roadmap</li>
+                        <li class="text-white">✅ Interview simulation</li>
+                        <li class="text-white">✅ Advanced salary insights</li>
+                    </ul>
+                </div>
+                <button class="btn btn-udaan w-100" id="sidebarUpgradeBtn" onclick="upgradeToPro()"><i class="bi bi-lightning-fill me-2"></i>Upgrade Free</button>
+            </div>
+            <!-- Message counter (free only) -->
+            <div class="udaan-card p-4 mb-4" id="msgCounterCard">
+                <h6 class="text-white-50 fw-semibold mb-2"><i class="bi bi-chat-dots me-2"></i>Messages Used</h6>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="fw-bold text-white" style="font-size:2rem;font-family:'Syne',sans-serif;"><span id="msgCount">0</span><span class="text-white-50 fs-6">/5</span></div>
+                    <div style="flex:1;"><div class="match-bar"><div class="match-fill" id="msgBar" style="width:0%;background:linear-gradient(90deg,#22c55e,#ffd700);"></div></div><small class="text-white-50">Free tier</small></div>
+                </div>
+            </div>
+            <!-- Suggested topics -->
+            <div class="udaan-card p-4">
+                <h6 class="text-warning fw-bold mb-3"><i class="bi bi-lightbulb me-2"></i>Suggested Topics</h6>
+                <div class="d-flex flex-column gap-2">
+                    <button class="btn text-start btn-sm text-white-50" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;" onclick="quickAsk('What are the best jobs for beginners in tech?')">Best jobs for beginners in tech?</button>
+                    <button class="btn text-start btn-sm text-white-50" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;" onclick="quickAsk('How do I negotiate my salary?')">How to negotiate salary?</button>
+                    <button class="btn text-start btn-sm text-white-50" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;" onclick="quickAsk('What should I learn to get a remote job?')">Skills for remote jobs?</button>
+                    <button class="btn text-start btn-sm text-white-50" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;" onclick="quickAsk('How to handle workplace discrimination?')">Handle workplace discrimination?</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="footer-placeholder"></div>
+<div id="auth-modals-placeholder"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../static/js/common.js"></script>
+<script>
+document.getElementById('navbar-placeholder').innerHTML = renderNavbar('chat.html');
+document.getElementById('footer-placeholder').innerHTML = renderFooter();
+document.getElementById('auth-modals-placeholder').innerHTML = renderAuthModals();
+
+let msgCount = 0;
+const user = getUser();
+
+function updateModeUI() {
+    if (isPro()) {
+        document.getElementById('chat-mode-badge').className = 'mode-indicator mode-pro';
+        document.getElementById('chat-mode-badge').innerHTML = '<i class="bi bi-lightning-fill me-1"></i>Pro Mode – Unlimited';
+        document.getElementById('chat-upgrade-btn').style.display = 'none';
+        document.getElementById('sidebarUpgradeBtn').textContent = '✅ Pro Activated!';
+        document.getElementById('sidebarUpgradeBtn').disabled = true;
+        document.getElementById('msgCounterCard').classList.add('d-none');
+    }
+}
+
+function getTime() {
+    return new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+}
+
+function appendMsg(text, role, isProResponse = false) {
+    const area = document.getElementById('chatArea');
+    const isUser = role === 'user';
+    const time = getTime();
+    const div = document.createElement('div');
+    div.className = 'fade-in mb-3 d-flex ' + (isUser ? 'justify-content-end' : 'gap-2');
+    if (isUser) {
+        div.innerHTML = `
+            <div>
+                <div class="chat-bubble-user p-3 text-white">${text}</div>
+                <div class="msg-time mt-1 text-end me-2">${time}</div>
+            </div>`;
+    } else {
+        const proBorder = isProResponse ? 'border-color:rgba(255,215,0,0.4);' : '';
+        div.innerHTML = `
+            <div style="width:32px;height:32px;background:linear-gradient(135deg,#2d1b69,#4c2fa0);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">🤖</div>
+            <div>
+                <div class="chat-bubble-ai p-3" style="${proBorder}">
+                    ${isProResponse ? '<span class="pro-badge me-2">PRO</span>' : ''}
+                    <span class="text-white-50" style="white-space:pre-line;">${text}</span>
+                </div>
+                <div class="msg-time mt-1 ms-2">${time}</div>
+            </div>`;
+    }
+    area.appendChild(div);
+    area.scrollTop = area.scrollHeight;
+}
+
+function showTyping() {
+    const area = document.getElementById('chatArea');
+    const div = document.createElement('div');
+    div.id = 'typingIndicator';
+    div.className = 'd-flex gap-2 mb-3';
+    div.innerHTML = `
+        <div style="width:32px;height:32px;background:linear-gradient(135deg,#2d1b69,#4c2fa0);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">🤖</div>
+        <div class="chat-bubble-ai p-3 d-flex gap-2 align-items-center">
+            <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+        </div>`;
+    area.appendChild(div);
+    area.scrollTop = area.scrollHeight;
+}
+
+function removeTyping() {
+    document.getElementById('typingIndicator')?.remove();
+}
+
+function updateCounter() {
+    if (isPro()) return;
+    msgCount++;
+    document.getElementById('msgCount').textContent = msgCount;
+    const pct = (msgCount / 5) * 100;
+    document.getElementById('msgBar').style.width = pct + '%';
+    document.getElementById('msgBar').style.background = pct >= 80 ? 'linear-gradient(90deg,#ef4444,#f97316)' : 'linear-gradient(90deg,#22c55e,#ffd700)';
+}
+
+async function sendMsg() {
+    const input = document.getElementById('chatInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+    input.value = '';
+    document.getElementById('sendBtn').disabled = true;
+    appendMsg(msg, 'user');
+    updateCounter();
+    showTyping();
+    await new Promise(r => setTimeout(r, 800 + Math.random() * 600));
+    const res = await apiPost('/chat', { message: msg, is_pro: isPro(), user_id: user?.id || 'anon' });
+    removeTyping();
+    document.getElementById('sendBtn').disabled = false;
+    if (res) {
+        if (res.limit_reached) {
+            appendMsg(res.reply, 'ai', false);
+            document.getElementById('chatInput').disabled = true;
+            document.getElementById('sendBtn').disabled = true;
+        } else {
+            appendMsg(res.reply, 'ai', res.is_pro);
+        }
+    } else {
+        appendMsg('Sorry, I could not connect to the server. Please check if the backend is running.', 'ai');
+    }
+}
+
+function quickAsk(msg) {
+    document.getElementById('chatInput').value = msg;
+    sendMsg();
+}
+
+function clearChat() {
+    if (confirm('Clear chat history?')) {
+        const area = document.getElementById('chatArea');
+        area.innerHTML = '';
+        msgCount = 0;
+        document.getElementById('msgCount').textContent = 0;
+        document.getElementById('msgBar').style.width = '0%';
+        appendMsg('Chat cleared! How can I help you today? 😊', 'ai');
+    }
+}
+
+updateModeUI();
+</script>
+</body>
+</html>

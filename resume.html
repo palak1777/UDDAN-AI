@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Inclusive Resume Builder – UdaanAI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../static/css/style.css" rel="stylesheet">
+    <style>
+        .resume-preview { background:#0f0a23; border:1px solid rgba(255,215,0,0.2); border-radius:16px; padding:32px; min-height:400px; font-family:'Inter',sans-serif; }
+        .tip-item { background:rgba(255,255,255,0.04); border-left:3px solid; border-radius:0 10px 10px 0; padding:12px 16px; margin-bottom:10px; transition:all 0.2s; }
+        .tip-item:hover { background:rgba(255,255,255,0.07); }
+        .tip-free { border-color:#22c55e; }
+        .tip-pro { border-color:#ffd700; }
+        .step-tab { background:rgba(255,255,255,0.04); border:1px solid rgba(255,215,0,0.1); border-radius:10px; padding:10px 16px; cursor:pointer; transition:all 0.2s; color:#94a3b8; }
+        .step-tab.active { background:rgba(255,215,0,0.12); border-color:rgba(255,215,0,0.4); color:#ffd700; }
+        .progress-step { width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem; }
+        .step-done { background:linear-gradient(135deg,#22c55e,#16a34a); color:white; }
+        .step-active { background:linear-gradient(135deg,#ffd700,#ff6b35); color:#0d0221; }
+        .step-inactive { background:rgba(255,255,255,0.08); color:#94a3b8; }
+    </style>
+</head>
+<body>
+<div id="navbar-placeholder"></div>
+<section class="page-hero">
+    <div class="container text-center position-relative z-1">
+        <div class="badge mb-3" style="background:rgba(255,107,53,0.15);color:#ff6b35;padding:8px 16px;border-radius:50px;"><i class="bi bi-file-person-fill me-2"></i>Inclusive Resume Builder</div>
+        <h1 class="section-heading text-white mb-3">Build Your <span class="gradient-text">Dream Resume</span></h1>
+        <p class="text-white-50 mx-auto" style="max-width:600px;">Create a powerful resume with AI-powered tips tailored for inclusive workplaces. Pro users get advanced ATS and skill optimization.</p>
+        <div id="mode-banner" class="mt-3 d-inline-block mode-indicator mode-free"><i class="bi bi-lock-fill me-1"></i>Free Mode</div>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Form side -->
+        <div class="col-lg-7">
+            <!-- Progress Steps -->
+            <div class="d-flex align-items-center gap-3 mb-4 flex-wrap">
+                <div class="d-flex align-items-center gap-2"><div class="progress-step step-active" id="s1">1</div><span class="small text-white">Personal</span></div>
+                <div style="flex:1;height:2px;background:rgba(255,255,255,0.1);min-width:20px;"></div>
+                <div class="d-flex align-items-center gap-2"><div class="progress-step step-inactive" id="s2">2</div><span class="small text-white-50">Skills</span></div>
+                <div style="flex:1;height:2px;background:rgba(255,255,255,0.1);min-width:20px;"></div>
+                <div class="d-flex align-items-center gap-2"><div class="progress-step step-inactive" id="s3">3</div><span class="small text-white-50">Experience</span></div>
+                <div style="flex:1;height:2px;background:rgba(255,255,255,0.1);min-width:20px;"></div>
+                <div class="d-flex align-items-center gap-2"><div class="progress-step step-inactive" id="s4">4</div><span class="small text-white-50">Review</span></div>
+            </div>
+
+            <div class="udaan-card p-4">
+                <!-- Step 1 -->
+                <div id="step1">
+                    <h5 class="text-warning fw-bold mb-4"><i class="bi bi-person-fill me-2"></i>Personal Information</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6"><label class="text-white-50 small">Full Name *</label><input id="rName" class="form-control mt-1" placeholder="Your full name"></div>
+                        <div class="col-md-6"><label class="text-white-50 small">Email *</label><input id="rEmail" class="form-control mt-1" placeholder="you@email.com" type="email"></div>
+                        <div class="col-md-6"><label class="text-white-50 small">Phone</label><input id="rPhone" class="form-control mt-1" placeholder="+91 XXXXXXXXXX"></div>
+                        <div class="col-md-6"><label class="text-white-50 small">City</label><input id="rCity" class="form-control mt-1" placeholder="Mumbai, Delhi..."></div>
+                        <div class="col-12"><label class="text-white-50 small">Professional Summary</label><textarea id="rSummary" class="form-control mt-1" rows="3" placeholder="A brief description of your professional background and goals..."></textarea></div>
+                    </div>
+                    <button class="btn btn-udaan mt-4" onclick="goStep(2)">Next: Skills <i class="bi bi-arrow-right ms-1"></i></button>
+                </div>
+                <!-- Step 2 -->
+                <div id="step2" class="d-none">
+                    <h5 class="text-warning fw-bold mb-4"><i class="bi bi-tools me-2"></i>Skills & Expertise</h5>
+                    <div class="mb-3"><label class="text-white-50 small">Technical Skills (comma separated)</label><input id="rSkills" class="form-control mt-1" placeholder="Python, Figma, Excel, Communication..."></div>
+                    <div class="mb-3"><label class="text-white-50 small">Certifications</label><input id="rCerts" class="form-control mt-1" placeholder="Google Analytics, AWS, Coursera..."></div>
+                    <div class="mb-3"><label class="text-white-50 small">Languages</label><input id="rLangs" class="form-control mt-1" placeholder="English, Hindi, Tamil..."></div>
+                    <div class="d-flex gap-2 mt-4">
+                        <button class="btn btn-outline-udaan" onclick="goStep(1)"><i class="bi bi-arrow-left me-1"></i>Back</button>
+                        <button class="btn btn-udaan" onclick="goStep(3)">Next: Experience <i class="bi bi-arrow-right ms-1"></i></button>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div id="step3" class="d-none">
+                    <h5 class="text-warning fw-bold mb-4"><i class="bi bi-briefcase-fill me-2"></i>Experience & Education</h5>
+                    <div class="mb-3"><label class="text-white-50 small">Work Experience</label><textarea id="rExp" class="form-control mt-1" rows="4" placeholder="Job Title, Company — Year&#10;• Responsibility 1&#10;• Responsibility 2"></textarea></div>
+                    <div class="mb-3"><label class="text-white-50 small">Education</label><textarea id="rEdu" class="form-control mt-1" rows="3" placeholder="Degree, Institution, Year&#10;e.g. B.Tech Computer Science, IIT Delhi, 2022"></textarea></div>
+                    <div class="d-flex gap-2 mt-4">
+                        <button class="btn btn-outline-udaan" onclick="goStep(2)"><i class="bi bi-arrow-left me-1"></i>Back</button>
+                        <button class="btn btn-udaan" onclick="goStep(4)">Preview & Submit <i class="bi bi-arrow-right ms-1"></i></button>
+                    </div>
+                </div>
+                <!-- Step 4 -->
+                <div id="step4" class="d-none">
+                    <h5 class="text-warning fw-bold mb-4"><i class="bi bi-eye-fill me-2"></i>Review & Submit</h5>
+                    <div id="reviewContent" class="mb-4"></div>
+                    <div id="submitMsg" class="alert d-none"></div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-udaan" onclick="goStep(3)"><i class="bi bi-arrow-left me-1"></i>Edit</button>
+                        <button class="btn btn-udaan" onclick="submitResume()"><i class="bi bi-send-fill me-2"></i>Submit Resume</button>
+                        <button class="btn btn-warning fw-bold ms-auto" onclick="getAISuggestions()"><i class="bi bi-stars me-2"></i>Get AI Tips</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Tips & Preview -->
+        <div class="col-lg-5">
+            <!-- AI Tips Panel -->
+            <div class="udaan-card p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="text-warning fw-bold mb-0"><i class="bi bi-robot me-2"></i>AI Resume Tips</h6>
+                    <div id="tips-mode-badge" class="mode-indicator mode-free" style="font-size:0.75rem;padding:4px 10px;">Free</div>
+                </div>
+                <div id="tipsList">
+                    <div class="tip-item tip-free"><i class="bi bi-check-circle-fill text-success me-2"></i><small class="text-white-50">Fill out the form to get personalized AI tips</small></div>
+                    <div class="text-center py-4" id="tipsPlaceholder">
+                        <div style="font-size:3rem;">💡</div>
+                        <p class="text-white-50 small mt-2">AI tips appear here after you complete the form</p>
+                        <button class="btn btn-sm btn-outline-udaan" onclick="getAISuggestions()">Get Free Tips</button>
+                    </div>
+                </div>
+                <div class="mt-3" id="pro-tip-teaser">
+                    <div class="p-3 rounded" style="background:rgba(255,215,0,0.08);border:1px dashed rgba(255,215,0,0.3);">
+                        <small class="text-warning"><i class="bi bi-lightning-fill me-2"></i><strong>Pro Tip:</strong> Unlock 5 advanced ATS-optimization tips</small>
+                        <button class="btn btn-warning btn-sm w-100 mt-2 fw-bold" onclick="upgradeToPro()">Upgrade to Pro</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Preview -->
+            <div class="resume-preview">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="text-white fw-bold mb-0"><i class="bi bi-file-earmark-person me-2"></i>Live Preview</h6>
+                    <span class="skill-chip">Auto-updates</span>
+                </div>
+                <div id="livePreview">
+                    <div class="text-center py-4 text-white-50">
+                        <i class="bi bi-file-earmark-text fs-1 d-block mb-2"></i>
+                        <small>Start filling the form to see your resume preview</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="footer-placeholder"></div>
+<div id="auth-modals-placeholder"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../static/js/common.js"></script>
+<script>
+document.getElementById('navbar-placeholder').innerHTML = renderNavbar('resume.html');
+document.getElementById('footer-placeholder').innerHTML = renderFooter();
+document.getElementById('auth-modals-placeholder').innerHTML = renderAuthModals();
+
+// Update mode UI
+if (isPro()) {
+    document.getElementById('mode-banner').className = 'mt-3 d-inline-block mode-indicator mode-pro';
+    document.getElementById('mode-banner').innerHTML = '<i class="bi bi-lightning-fill me-1"></i>Pro Mode – Advanced Tips Unlocked';
+    document.getElementById('pro-tip-teaser').classList.add('d-none');
+}
+
+function goStep(n) {
+    [1,2,3,4].forEach(i => {
+        document.getElementById('step'+i).classList.toggle('d-none', i !== n);
+        const el = document.getElementById('s'+i);
+        el.className = 'progress-step ' + (i < n ? 'step-done' : i === n ? 'step-active' : 'step-inactive');
+        if (i < n) el.innerHTML = '<i class="bi bi-check"></i>';
+        else el.textContent = i;
+    });
+    if (n === 4) buildReview();
+    updateLivePreview();
+}
+
+function buildReview() {
+    const name = document.getElementById('rName').value || '—';
+    const email = document.getElementById('rEmail').value || '—';
+    const phone = document.getElementById('rPhone').value || '—';
+    const city = document.getElementById('rCity').value || '—';
+    const skills = document.getElementById('rSkills').value || '—';
+    const exp = document.getElementById('rExp').value || '—';
+    const edu = document.getElementById('rEdu').value || '—';
+    document.getElementById('reviewContent').innerHTML = `
+        <div class="row g-2">
+            <div class="col-6"><small class="text-white-50">Name</small><div class="text-white small fw-semibold">${name}</div></div>
+            <div class="col-6"><small class="text-white-50">Email</small><div class="text-white small fw-semibold">${email}</div></div>
+            <div class="col-6"><small class="text-white-50">Phone</small><div class="text-white small fw-semibold">${phone}</div></div>
+            <div class="col-6"><small class="text-white-50">City</small><div class="text-white small fw-semibold">${city}</div></div>
+            <div class="col-12"><small class="text-white-50">Skills</small><div class="text-white small fw-semibold">${skills}</div></div>
+        </div>`;
+}
+
+function updateLivePreview() {
+    const name = document.getElementById('rName').value;
+    const email = document.getElementById('rEmail').value;
+    const phone = document.getElementById('rPhone').value;
+    const summary = document.getElementById('rSummary').value;
+    const skills = document.getElementById('rSkills').value;
+    const exp = document.getElementById('rExp').value;
+    const edu = document.getElementById('rEdu').value;
+    if (!name) return;
+    const chips = skills ? skills.split(',').map(s=>`<span class="skill-chip">${s.trim()}</span>`).join('') : '';
+    document.getElementById('livePreview').innerHTML = `
+        <div style="border-bottom:2px solid rgba(255,215,0,0.3);padding-bottom:16px;margin-bottom:16px;">
+            <h5 class="text-white fw-bold mb-1" style="font-family:'Syne',sans-serif;">${name}</h5>
+            <div class="d-flex flex-wrap gap-3">
+                ${email ? `<small class="text-white-50"><i class="bi bi-envelope me-1"></i>${email}</small>` : ''}
+                ${phone ? `<small class="text-white-50"><i class="bi bi-phone me-1"></i>${phone}</small>` : ''}
+            </div>
+        </div>
+        ${summary ? `<div class="mb-3"><div class="text-warning fw-bold small mb-1">SUMMARY</div><p class="text-white-50" style="font-size:0.8rem;">${summary}</p></div>` : ''}
+        ${skills ? `<div class="mb-3"><div class="text-warning fw-bold small mb-2">SKILLS</div>${chips}</div>` : ''}
+        ${exp ? `<div class="mb-3"><div class="text-warning fw-bold small mb-1">EXPERIENCE</div><pre class="text-white-50" style="font-size:0.75rem;font-family:inherit;white-space:pre-wrap;">${exp}</pre></div>` : ''}
+        ${edu ? `<div><div class="text-warning fw-bold small mb-1">EDUCATION</div><pre class="text-white-50" style="font-size:0.75rem;font-family:inherit;white-space:pre-wrap;">${edu}</pre></div>` : ''}`;
+}
+
+// Auto-update preview on input
+['rName','rEmail','rPhone','rCity','rSummary','rSkills','rExp','rEdu'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', updateLivePreview);
+});
+
+async function getAISuggestions() {
+    const skills = document.getElementById('rSkills').value;
+    document.getElementById('tipsPlaceholder')?.remove();
+    document.getElementById('tipsList').innerHTML = '<div class="spinner-udaan mx-auto d-block"></div>';
+    const res = await apiPost('/resume/suggest', { skills, is_pro: isPro() });
+    if (!res) return;
+    document.getElementById('tips-mode-badge').className = 'mode-indicator ' + (res.is_pro ? 'mode-pro' : 'mode-free');
+    document.getElementById('tips-mode-badge').textContent = res.is_pro ? '⚡ Pro' : 'Free';
+    document.getElementById('tipsList').innerHTML = res.tips.map((t,i) => {
+        const isPr = t.startsWith('PRO');
+        return `<div class="tip-item ${isPr ? 'tip-pro' : 'tip-free'} fade-in" style="animation-delay:${i*0.1}s">
+            <small><i class="bi ${isPr ? 'bi-lightning-fill text-warning' : 'bi-check-circle-fill text-success'} me-2"></i>${t}</small></div>`;
+    }).join('');
+}
+
+async function submitResume() {
+    const name = document.getElementById('rName').value;
+    const email = document.getElementById('rEmail').value;
+    if (!name || !email) { alert('Please fill in your name and email first.'); return; }
+    const res = await apiPost('/resume/submit', {
+        name, email,
+        skills: document.getElementById('rSkills').value,
+        experience: document.getElementById('rExp').value,
+        education: document.getElementById('rEdu').value,
+        summary: document.getElementById('rSummary').value
+    });
+    const msg = document.getElementById('submitMsg');
+    msg.classList.remove('d-none');
+    if (res && res.success) {
+        msg.className = 'alert alert-success';
+        msg.innerHTML = '🎉 Resume submitted! Our team will match you with verified employers soon.';
+    } else {
+        msg.className = 'alert alert-danger';
+        msg.textContent = 'Submission failed. Please try again.';
+    }
+}
+</script>
+</body>
+</html>

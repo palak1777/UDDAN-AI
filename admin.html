@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Admin Dashboard – UdaanAI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../static/css/style.css" rel="stylesheet">
+    <style>
+        body { background:#0a0118; }
+        .admin-layout { display:flex; min-height:100vh; }
+        .sidebar { width:240px; background:linear-gradient(180deg,#1a0533 0%,#0d0221 100%); border-right:1px solid rgba(255,215,0,0.12); flex-shrink:0; position:sticky; top:0; height:100vh; overflow-y:auto; }
+        .sidebar-brand { padding:20px 20px 10px; border-bottom:1px solid rgba(255,215,0,0.1); }
+        .sidebar-nav .nav-link { color:rgba(255,255,255,0.55); padding:10px 16px; border-radius:10px; margin:2px 8px; transition:all 0.2s; font-size:0.9rem; }
+        .sidebar-nav .nav-link:hover,.sidebar-nav .nav-link.active { background:rgba(255,215,0,0.12); color:#ffd700; }
+        .main-content { flex:1; overflow:hidden; }
+        .topbar { background:rgba(255,255,255,0.03); border-bottom:1px solid rgba(255,215,0,0.1); padding:16px 24px; display:flex; align-items:center; justify-content:space-between; }
+        .stat-mini { background:rgba(255,255,255,0.04); border:1px solid rgba(255,215,0,0.12); border-radius:14px; padding:20px; }
+        .stat-mini .num { font-size:2rem; font-weight:800; font-family:'Syne',sans-serif; }
+        .admin-section { display:none; }
+        .admin-section.active { display:block; }
+        #loginScreen { min-height:100vh; background:radial-gradient(ellipse at 50% 50%,#1a0533 0%,#0a0118 100%); display:flex; align-items:center; justify-content:center; }
+        .login-card { width:420px; max-width:95vw; }
+    </style>
+</head>
+<body>
+
+<!-- Login screen -->
+<div id="loginScreen">
+    <div class="login-card">
+        <div class="udaan-card p-5">
+            <div class="text-center mb-4">
+                <div style="width:60px;height:60px;background:linear-gradient(135deg,#ff6b35,#ffd700);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:auto;font-size:1.8rem;">🔑</div>
+                <h4 class="text-white fw-bold mt-3">Admin Login</h4>
+                <p class="text-white-50 small">UdaanAI Control Panel</p>
+            </div>
+            <div id="adminLoginError" class="alert alert-danger d-none"></div>
+            <div class="mb-3"><label class="text-white-50 small">Username</label><input id="adminUser" class="form-control mt-1" value="admin" placeholder="admin"></div>
+            <div class="mb-4"><label class="text-white-50 small">Password</label><input id="adminPass" class="form-control mt-1" type="password" value="admin123" placeholder="••••••••"></div>
+            <button class="btn btn-udaan w-100 fw-bold" onclick="adminLogin()"><i class="bi bi-shield-lock-fill me-2"></i>Login to Dashboard</button>
+            <div class="text-center mt-3"><a href="index.html" class="text-white-50 small">← Back to UdaanAI</a></div>
+        </div>
+    </div>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard" class="admin-layout d-none">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <div class="d-flex align-items-center gap-2">
+                <div style="width:32px;height:32px;background:linear-gradient(135deg,#ff6b35,#ffd700);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;">🚀</div>
+                <span style="font-weight:700;font-family:'Syne',sans-serif;background:linear-gradient(90deg,#ffd700,#ff6b35);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">UdaanAI Admin</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav mt-3 pb-3">
+            <a class="nav-link active" href="#" onclick="showSection('overview')"><i class="bi bi-grid-fill me-2"></i>Overview</a>
+            <a class="nav-link" href="#" onclick="showSection('jobs')"><i class="bi bi-briefcase-fill me-2"></i>Jobs</a>
+            <a class="nav-link" href="#" onclick="showSection('employers')"><i class="bi bi-building me-2"></i>Employers</a>
+            <a class="nav-link" href="#" onclick="showSection('resumes')"><i class="bi bi-file-person-fill me-2"></i>Resumes</a>
+            <a class="nav-link" href="#" onclick="showSection('resources')"><i class="bi bi-heart-fill me-2"></i>Resources</a>
+            <hr class="border-secondary mx-3">
+            <a class="nav-link" href="index.html"><i class="bi bi-arrow-left me-2"></i>Back to Site</a>
+            <a class="nav-link text-danger" href="#" onclick="adminLogout()"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
+        </nav>
+    </div>
+
+    <!-- Main -->
+    <div class="main-content">
+        <div class="topbar">
+            <h5 class="text-white fw-bold mb-0" id="sectionTitle">Overview</h5>
+            <div class="d-flex align-items-center gap-2">
+                <span class="skill-chip"><i class="bi bi-shield-check-fill text-success me-1"></i>Admin</span>
+            </div>
+        </div>
+        <div class="p-4">
+
+            <!-- Overview -->
+            <div id="section-overview" class="admin-section active">
+                <div class="row g-3 mb-4" id="statsRow">
+                    <div class="col-6 col-lg-3"><div class="stat-mini"><div class="num text-warning" id="s-jobs">—</div><div class="text-white-50 small mt-1"><i class="bi bi-briefcase me-1"></i>Total Jobs</div></div></div>
+                    <div class="col-6 col-lg-3"><div class="stat-mini"><div class="num text-success" id="s-active">—</div><div class="text-white-50 small mt-1"><i class="bi bi-eye me-1"></i>Active Jobs</div></div></div>
+                    <div class="col-6 col-lg-3"><div class="stat-mini"><div class="num text-info" id="s-employers">—</div><div class="text-white-50 small mt-1"><i class="bi bi-building me-1"></i>Employers</div></div></div>
+                    <div class="col-6 col-lg-3"><div class="stat-mini"><div class="num" style="color:#a78bfa" id="s-users">—</div><div class="text-white-50 small mt-1"><i class="bi bi-people me-1"></i>Total Users</div></div></div>
+                    <div class="col-6 col-lg-3"><div class="stat-mini"><div class="num text-warning" id="s-pro">—</div><div class="text-white-50 small mt-1"><i class="bi bi-lightning me-1"></i>Pro Users</div></div></div>
+                    <div class="col-6 col-lg-3"><div class="stat-mini"><div class="num" style="color:#f97316" id="s-resumes">—</div><div class="text-white-50 small mt-1"><i class="bi bi-file-person me-1"></i>Resumes</div></div></div>
+                    <div class="col-6 col-lg-3"><div class="stat-mini"><div class="num text-success" id="s-verified">—</div><div class="text-white-50 small mt-1"><i class="bi bi-patch-check me-1"></i>Verified Employers</div></div></div>
+                    <div class="col-6 col-lg-3"><div class="stat-mini"><div class="num text-info" id="s-resources">—</div><div class="text-white-50 small mt-1"><i class="bi bi-heart me-1"></i>Resources</div></div></div>
+                </div>
+                <div class="udaan-card p-4">
+                    <h6 class="text-warning fw-bold mb-3">Quick Actions</h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-udaan btn-sm" onclick="showSection('jobs')"><i class="bi bi-plus-lg me-1"></i>Add Job</button>
+                        <button class="btn btn-outline-udaan btn-sm" onclick="showSection('employers')"><i class="bi bi-patch-check me-1"></i>Verify Employers</button>
+                        <button class="btn btn-outline-udaan btn-sm" onclick="showSection('resumes')"><i class="bi bi-eye me-1"></i>View Resumes</button>
+                        <button class="btn btn-outline-udaan btn-sm" onclick="showSection('resources')"><i class="bi bi-plus-lg me-1"></i>Add Resource</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Jobs Section -->
+            <div id="section-jobs" class="admin-section">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h6 class="text-white fw-bold mb-0">Manage Jobs</h6>
+                    <button class="btn btn-udaan btn-sm" data-bs-toggle="collapse" data-bs-target="#addJobForm"><i class="bi bi-plus-lg me-1"></i>Add New Job</button>
+                </div>
+                <div class="collapse mb-4" id="addJobForm">
+                    <div class="udaan-card p-4">
+                        <h6 class="text-warning fw-bold mb-3">Add New Job</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6"><input id="j-title" class="form-control" placeholder="Job Title *"></div>
+                            <div class="col-md-6"><input id="j-company" class="form-control" placeholder="Company *"></div>
+                            <div class="col-md-4"><input id="j-location" class="form-control" placeholder="Location"></div>
+                            <div class="col-md-4"><select id="j-category" class="form-select"><option>Technology</option><option>Design</option><option>Data Science</option><option>Marketing</option><option>HR</option><option>Media</option><option>Support</option></select></div>
+                            <div class="col-md-4"><select id="j-type" class="form-select"><option>Full-time</option><option>Part-time</option><option>Freelance</option><option>Contract</option></select></div>
+                            <div class="col-md-6"><input id="j-skills" class="form-control" placeholder="Skills (comma separated)"></div>
+                            <div class="col-md-3"><input id="j-salary" class="form-control" placeholder="Salary e.g. 4-8 LPA"></div>
+                            <div class="col-md-3"><input id="j-score" class="form-control" type="number" placeholder="Inclusive Score" min="0" max="100" value="80"></div>
+                            <div class="col-12"><textarea id="j-desc" class="form-control" rows="2" placeholder="Job Description"></textarea></div>
+                        </div>
+                        <button class="btn btn-udaan mt-3" onclick="addJob()"><i class="bi bi-plus-circle me-2"></i>Add Job</button>
+                    </div>
+                </div>
+                <div class="udaan-card overflow-hidden">
+                    <div class="table-responsive">
+                        <table class="table table-udaan mb-0">
+                            <thead><tr><th>ID</th><th>Title</th><th>Company</th><th>Location</th><th>Type</th><th>Score</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody id="jobsTable"><tr><td colspan="8" class="text-center text-white-50 py-4">Loading...</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Employers Section -->
+            <div id="section-employers" class="admin-section">
+                <h6 class="text-white fw-bold mb-4">Manage Employers</h6>
+                <div class="udaan-card overflow-hidden">
+                    <div class="table-responsive">
+                        <table class="table table-udaan mb-0">
+                            <thead><tr><th>ID</th><th>Name</th><th>Industry</th><th>City</th><th>Score</th><th>Verified</th><th>Actions</th></tr></thead>
+                            <tbody id="employersTable"><tr><td colspan="7" class="text-center text-white-50 py-4">Loading...</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resumes Section -->
+            <div id="section-resumes" class="admin-section">
+                <h6 class="text-white fw-bold mb-4">Resume Submissions</h6>
+                <div class="udaan-card overflow-hidden">
+                    <div class="table-responsive">
+                        <table class="table table-udaan mb-0">
+                            <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Skills</th><th>Submitted</th></tr></thead>
+                            <tbody id="resumesTable"><tr><td colspan="5" class="text-center text-white-50 py-4">Loading...</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources Section -->
+            <div id="section-resources" class="admin-section">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h6 class="text-white fw-bold mb-0">Manage Resources</h6>
+                    <button class="btn btn-udaan btn-sm" data-bs-toggle="collapse" data-bs-target="#addResForm"><i class="bi bi-plus-lg me-1"></i>Add Resource</button>
+                </div>
+                <div class="collapse mb-4" id="addResForm">
+                    <div class="udaan-card p-4">
+                        <div class="row g-3">
+                            <div class="col-md-6"><input id="r-title" class="form-control" placeholder="Resource Title *"></div>
+                            <div class="col-md-6"><select id="r-category" class="form-select"><option>NGO</option><option>Legal</option><option>Government</option><option>Helpline</option><option>Scholarship</option></select></div>
+                            <div class="col-12"><textarea id="r-desc" class="form-control" rows="2" placeholder="Description"></textarea></div>
+                            <div class="col-md-6"><input id="r-link" class="form-control" placeholder="Website URL"></div>
+                            <div class="col-md-6"><input id="r-phone" class="form-control" placeholder="Phone Number"></div>
+                        </div>
+                        <button class="btn btn-udaan mt-3" onclick="addResource()"><i class="bi bi-plus-circle me-2"></i>Add Resource</button>
+                    </div>
+                </div>
+                <div class="udaan-card overflow-hidden">
+                    <div class="table-responsive">
+                        <table class="table table-udaan mb-0">
+                            <thead><tr><th>ID</th><th>Title</th><th>Category</th><th>Phone</th><th>Actions</th></tr></thead>
+                            <tbody id="resourcesTable"><tr><td colspan="5" class="text-center text-white-50 py-4">Loading...</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../static/js/common.js"></script>
+<script>
+async function adminLogin() {
+    const username = document.getElementById('adminUser').value;
+    const password = document.getElementById('adminPass').value;
+    const res = await apiPost('/admin/login', { username, password });
+    if (res && res.success) {
+        document.getElementById('loginScreen').classList.add('d-none');
+        document.getElementById('dashboard').classList.remove('d-none');
+        loadStats();
+    } else {
+        const err = document.getElementById('adminLoginError');
+        err.textContent = 'Invalid credentials. Try admin / admin123';
+        err.classList.remove('d-none');
+    }
+}
+
+async function adminLogout() {
+    await apiPost('/admin/logout', {});
+    document.getElementById('loginScreen').classList.remove('d-none');
+    document.getElementById('dashboard').classList.add('d-none');
+}
+
+function showSection(name) {
+    document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
+    document.querySelectorAll('.sidebar-nav .nav-link').forEach(l=>l.classList.remove('active'));
+    document.getElementById('section-'+name).classList.add('active');
+    document.querySelectorAll('.sidebar-nav .nav-link').forEach(l=>{if(l.textContent.toLowerCase().includes(name.slice(0,4)))l.classList.add('active');});
+    document.getElementById('sectionTitle').textContent = name.charAt(0).toUpperCase()+name.slice(1);
+    if (name === 'jobs') loadAdminJobs();
+    if (name === 'employers') loadAdminEmployers();
+    if (name === 'resumes') loadAdminResumes();
+    if (name === 'resources') loadAdminResources();
+}
+
+async function loadStats() {
+    const s = await apiGet('/admin/stats');
+    if (!s) return;
+    document.getElementById('s-jobs').textContent = s.total_jobs;
+    document.getElementById('s-active').textContent = s.active_jobs;
+    document.getElementById('s-employers').textContent = s.total_employers;
+    document.getElementById('s-users').textContent = s.total_users;
+    document.getElementById('s-pro').textContent = s.pro_users;
+    document.getElementById('s-resumes').textContent = s.total_resumes;
+    document.getElementById('s-verified').textContent = s.verified_employers;
+    document.getElementById('s-resources').textContent = s.total_resources;
+}
+
+async function loadAdminJobs() {
+    const jobs = await apiGet('/admin/jobs');
+    if (!jobs) return;
+    document.getElementById('jobsTable').innerHTML = jobs.map(j => `
+        <tr>
+            <td><small class="text-white-50">#${j.id}</small></td>
+            <td><span class="text-white fw-semibold">${j.title}</span></td>
+            <td><small class="text-white-50">${j.company}</small></td>
+            <td><small class="text-white-50">${j.location}</small></td>
+            <td><span class="skill-chip">${j.type}</span></td>
+            <td>${scoreBadge(j.inclusive_score)}</td>
+            <td><span class="badge ${j.is_visible ? 'bg-success' : 'bg-secondary'}">${j.is_visible ? 'Visible' : 'Hidden'}</span></td>
+            <td>
+                <button class="btn btn-sm btn-outline-warning me-1" onclick="toggleJob(${j.id})" title="${j.is_visible?'Hide':'Show'}"><i class="bi bi-${j.is_visible?'eye-slash':'eye'}"></i></button>
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteJob(${j.id})"><i class="bi bi-trash3"></i></button>
+            </td>
+        </tr>`).join('');
+}
+
+async function addJob() {
+    const data = {
+        title: document.getElementById('j-title').value,
+        company: document.getElementById('j-company').value,
+        location: document.getElementById('j-location').value,
+        category: document.getElementById('j-category').value,
+        type: document.getElementById('j-type').value,
+        skills: document.getElementById('j-skills').value,
+        salary: document.getElementById('j-salary').value,
+        description: document.getElementById('j-desc').value,
+        inclusive_score: parseInt(document.getElementById('j-score').value) || 80,
+    };
+    if (!data.title || !data.company) { alert('Title and Company are required.'); return; }
+    const res = await apiPost('/admin/jobs', data);
+    if (res && res.success) { bootstrap.Collapse.getInstance(document.getElementById('addJobForm'))?.hide(); loadAdminJobs(); loadStats(); alert('✅ Job added!'); }
+}
+
+async function toggleJob(id) {
+    await apiPut(`/admin/jobs/${id}/toggle`, {});
+    loadAdminJobs();
+}
+
+async function deleteJob(id) {
+    if (confirm('Delete this job?')) { await apiDelete(`/admin/jobs/${id}`); loadAdminJobs(); loadStats(); }
+}
+
+async function loadAdminEmployers() {
+    const emps = await apiGet('/admin/employers');
+    if (!emps) return;
+    document.getElementById('employersTable').innerHTML = emps.map(e => `
+        <tr>
+            <td><small class="text-white-50">#${e.id}</small></td>
+            <td><span class="text-white fw-semibold">${e.name}</span></td>
+            <td><small class="text-white-50">${e.industry}</small></td>
+            <td><small class="text-white-50">${e.city}</small></td>
+            <td>${scoreBadge(e.safety_score)}</td>
+            <td>${e.is_verified ? '<span class="badge bg-success">Verified</span>' : '<span class="badge bg-secondary">Pending</span>'}</td>
+            <td><button class="btn btn-sm ${e.is_verified ? 'btn-outline-warning' : 'btn-outline-success'}" onclick="toggleVerify(${e.id},${e.is_verified})"><i class="bi bi-${e.is_verified?'x':'patch-check'} me-1"></i>${e.is_verified?'Unverify':'Verify'}</button></td>
+        </tr>`).join('');
+}
+
+async function toggleVerify(id, current) {
+    await apiPut(`/admin/employers/${id}/verify`, { is_verified: current ? 0 : 1 });
+    loadAdminEmployers(); loadStats();
+}
+
+async function loadAdminResumes() {
+    const resumes = await apiGet('/admin/resumes');
+    if (!resumes) return;
+    document.getElementById('resumesTable').innerHTML = resumes.length
+        ? resumes.map(r => `<tr>
+            <td><small class="text-white-50">#${r.id}</small></td>
+            <td><span class="text-white">${r.user_name||'—'}</span></td>
+            <td><small class="text-white-50">${r.email||'—'}</small></td>
+            <td><small class="text-white-50">${(r.skills||'').slice(0,40)}${r.skills?.length>40?'...':''}</small></td>
+            <td><small class="text-white-50">${r.submitted_at?.slice(0,10)||'—'}</small></td>
+            </tr>`).join('')
+        : '<tr><td colspan="5" class="text-center text-white-50 py-4">No resumes submitted yet.</td></tr>';
+}
+
+async function loadAdminResources() {
+    const res = await apiGet('/admin/resources');
+    if (!res) return;
+    document.getElementById('resourcesTable').innerHTML = res.map(r => `
+        <tr>
+            <td><small class="text-white-50">#${r.id}</small></td>
+            <td><span class="text-white">${r.title}</span></td>
+            <td><span class="skill-chip">${r.category}</span></td>
+            <td><small class="text-white-50">${r.phone||'—'}</small></td>
+            <td><button class="btn btn-sm btn-outline-danger" onclick="deleteResource(${r.id})"><i class="bi bi-trash3"></i></button></td>
+        </tr>`).join('');
+}
+
+async function addResource() {
+    const data = {
+        title: document.getElementById('r-title').value,
+        category: document.getElementById('r-category').value,
+        description: document.getElementById('r-desc').value,
+        link: document.getElementById('r-link').value,
+        phone: document.getElementById('r-phone').value,
+    };
+    if (!data.title) { alert('Title is required.'); return; }
+    const res = await apiPost('/admin/resources', data);
+    if (res && res.success) { loadAdminResources(); loadStats(); alert('✅ Resource added!'); }
+}
+
+async function deleteResource(id) {
+    if (confirm('Delete this resource?')) { await apiDelete(`/admin/resources/${id}`); loadAdminResources(); loadStats(); }
+}
+
+// Allow pressing Enter to login
+document.getElementById('adminPass').addEventListener('keydown', e => { if (e.key === 'Enter') adminLogin(); });
+</script>
+</body>
+</html>
